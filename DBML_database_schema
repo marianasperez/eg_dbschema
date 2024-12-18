@@ -1,0 +1,62 @@
+Table user {
+  id int [pk]
+  name varchar
+  created_at datetime
+}
+
+Table game {
+  id int [pk]
+  name varchar
+  provider varchar
+  created_at datetime
+}
+
+Table bets {
+  id int [pk]
+  user_id int [ref: > user.id]
+  game_id int [ref: > game.id]
+  value decimal
+  multiplier decimal
+  profit decimal
+  created_at datetime
+}
+
+Table wallet {
+  id int [pk]
+  currency varchar [ref: > exchange_rate.currency] // Foreign Key added
+  created_at datetime
+}
+
+Table exchange_rate {
+  id int [pk]
+  currency varchar
+  rate decimal
+  created_at datetime
+}
+Table deposit {
+  id int [pk]
+  wallet_id int [ref: > wallet.id]
+  value decimal
+  created_at datetime
+}
+
+Table user_kyc {
+  user_id int [ref: > user.id]
+  kyc_level varchar
+  created_at datetime
+}
+
+Table campaign {
+  id int [pk]
+  name varchar
+  user_id int [ref: > user.id]
+  created_at datetime
+}
+
+Table referral {
+  campaign_id int [ref: > campaign.id]
+  referral_user_id int [ref: > user.id]
+}
+
+
+Ref: "user_kyc"."user_id" < "bets"."profit"

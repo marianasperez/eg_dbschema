@@ -1,0 +1,77 @@
+-- Create the 'user' table
+CREATE TABLE user (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    created_at DATETIME
+);
+
+-- Create the 'game' table
+CREATE TABLE game (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    provider VARCHAR(255),
+    created_at DATETIME
+);
+
+-- Create the 'bets' table
+CREATE TABLE bets (
+    id INT PRIMARY KEY,
+    user_id INT,
+    game_id INT,
+    value DECIMAL(10, 2),
+    multiplier DECIMAL(10, 2),
+    profit DECIMAL(10, 2),
+    created_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (game_id) REFERENCES game(id)
+);
+
+-- Create the 'exchange_rate' table
+CREATE TABLE exchange_rate (
+    id INT PRIMARY KEY,
+    currency VARCHAR(10),
+    rate DECIMAL(10, 4),
+    created_at DATETIME
+);
+
+-- Create the 'wallet' table
+CREATE TABLE wallet (
+    id INT PRIMARY KEY,
+    currency VARCHAR(10),
+    created_at DATETIME,
+    FOREIGN KEY (currency) REFERENCES exchange_rate(currency)
+);
+
+-- Create the 'deposit' table
+CREATE TABLE deposit (
+    id INT PRIMARY KEY,
+    wallet_id INT,
+    value DECIMAL(10, 2),
+    created_at DATETIME,
+    FOREIGN KEY (wallet_id) REFERENCES wallet(id)
+);
+
+-- Create the 'user_kyc' table
+CREATE TABLE user_kyc (
+    user_id INT,
+    kyc_level VARCHAR(255),
+    created_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+-- Create the 'campaign' table
+CREATE TABLE campaign (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    user_id INT,
+    created_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+-- Create the 'referral' table
+CREATE TABLE referral (
+    campaign_id INT,
+    referral_user_id INT,
+    FOREIGN KEY (campaign_id) REFERENCES campaign(id),
+    FOREIGN KEY (referral_user_id) REFERENCES user(id)
+);
